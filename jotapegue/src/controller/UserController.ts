@@ -18,7 +18,20 @@ class UserController {
             res.status(200).send({message: 'User successfully created', token})
         } catch (error) {
             const {statusCode, message} = error
-            throw new CustomError(statusCode, message)
+            res.status(statusCode || 400).send({message})
+        }
+    }
+
+
+    public login = async (req: Request, res: Response): Promise<void> => {
+        try {
+            const {email, password} = req.body
+            const loginData = {email, password}
+            const token = await userBusiness.login(loginData)
+            res.status(200).send({token})
+        } catch (error) {
+            const {statusCode, message} = error
+            res.status(statusCode || 400).send({message})
         }
     }
 }
