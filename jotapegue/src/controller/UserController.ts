@@ -1,6 +1,5 @@
 import { Response, Request } from 'express'
 import { userBusiness } from '../business/UserBusiness'
-import { CustomError } from '../error/CustomError'
 import { UserInputDTO } from '../model/User'
 
 
