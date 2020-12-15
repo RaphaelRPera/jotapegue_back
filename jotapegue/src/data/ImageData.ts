@@ -107,7 +107,7 @@ class ImageData extends BaseDataBase {
             if (!queryResult.length) {throw new CustomError(404, 'No images')}
             return queryResult
         } catch (error) {
-            const {statusCode, message} = error
+            const {code, statusCode, message} = error
             console.log(`[imageData]: [getAllImages]: [error]:`, error)
             throw new CustomError(statusCode, message)
         }
@@ -136,6 +136,40 @@ class ImageData extends BaseDataBase {
             return imageTag
         } catch (error) {
             const {statusCode, message} = error 
+            throw new CustomError(statusCode, message)
+        }
+    }
+
+    public deleteImage = async (id:string):Promise<any> => {
+        try {
+            await this.connection('JPG_IMAGE')
+                .delete()
+                .where({id})
+
+            return `[imageData]: [deleteImage]: [RETURN]`
+        } catch (error) {
+            const {code, message, statusCode} = error
+            console.log(`[imageData]: [deleteImage]: [error]:`, code, message)
+            throw new CustomError(statusCode, message)
+        }
+    }
+
+
+    public deleteImageTag = async (id:string):Promise<any> => {
+        try {
+            await this.connection('JPG_IMAGE_TAG')
+                .delete()
+                .where({image_id:id})
+
+            return `[imageData]: [deleteImageTag]: [RETURN]`
+        } catch (error) {
+            let {code, message} = error
+            console.log(`[imageData]: [deleteImageTag]: [error]:`, code, message)
+            let statusCode = 400
+            if (code === `ER_BAD_FIELD_ERROR`) {
+                statusCode = 500
+                message = `Internal Server Error`
+            }
             throw new CustomError(statusCode, message)
         }
     }

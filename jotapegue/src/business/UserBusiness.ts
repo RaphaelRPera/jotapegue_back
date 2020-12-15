@@ -65,7 +65,11 @@ class UserBusiness {
             if (!user) {throw new CustomError(401, 'Unauthorized')}
             return user
         } catch (error) {
-            const {statusCode, message} = error
+            let {statusCode, message} = error
+            if (message === 'jwt expired') {
+                statusCode = 401
+                message = `Unauthorized. New login required`
+            }
             throw new CustomError(statusCode, message)
         }
     }

@@ -42,6 +42,19 @@ class ImageController {
         }
     }
 
+
+    public deleteImage = async (req:Request, res: Response):Promise<void> => {
+        try {
+            const id = req.params.id
+            await imageBusiness.deleteImageTag(id)
+            await imageBusiness.deleteImage(id)
+            res.status(200).send({message: `Image successfully deleted`})
+        } catch (error) {
+            const {statusCode, message} = error
+            res.status(statusCode || 400).send({message})
+        }
+    }
+
 }
 
 

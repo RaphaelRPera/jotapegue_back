@@ -110,6 +110,29 @@ class ImageBusiness {
         }
     }
 
+
+    public deleteImage = async (id:string):Promise<any> => {
+        try {
+            if (!id) {throw new CustomError(406, 'ID is required')}
+            await imageData.deleteImage(id)
+            return `[imageBusiness]: [deleteImage]: [RETURN]`
+        } catch (error) {
+            const {statusCode, message} = error
+            throw new CustomError(statusCode, message)
+        }
+    }
+
+    public deleteImageTag = async (id:string):Promise<any> => {
+        try {
+            if (!id) {throw new CustomError(406, 'ID is required')}
+            await imageData.deleteImageTag(id)
+            return `[imageBusiness]: [deleteImageTag]: [RETURN]`
+        } catch (error) {
+            const {statusCode, message} = error
+            throw new CustomError(statusCode, message)
+        }
+    }
+
 }
 
 export const imageBusiness:ImageBusiness = new ImageBusiness()
