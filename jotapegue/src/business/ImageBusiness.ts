@@ -1,8 +1,10 @@
+import { userController } from "../controller/UserController";
 import { imageData } from "../data/ImageData";
 import { userData } from "../data/UserData";
 import { CustomError } from "../error/CustomError";
 import { services } from "../services/services";
 import { userBusiness } from "./UserBusiness";
+import { UserRole } from '../model/User'
 
 
 class ImageBusiness {
@@ -80,6 +82,34 @@ class ImageBusiness {
             }
         }
     }
+
+
+    public getImageById = async (data:any):Promise<any> => {
+        try {
+            const {id, token} = data
+
+            if (!id) {throw new CustomError(406, 'Image ID is required')}
+            if (!token) {throw new CustomError(401, 'Unauthorized')}
+
+            const user = await userBusiness.validateUser(token)
+            let image: any
+            if (id === 'all') {
+                if (user && user.role === UserRole.ADMIN) {
+                    image = await imageData.getAllImages()
+                } else {
+                    throw new CustomError(401, 'Unauthorized')
+                }
+            } else {
+                image =  await imageData.getImageById(id)
+            }
+
+            return image
+        } catch (error) {
+            const {statusCode, message} = error
+            throw new CustomError(statusCode, message)
+        }
+    }
+
 }
 
 export const imageBusiness:ImageBusiness = new ImageBusiness()

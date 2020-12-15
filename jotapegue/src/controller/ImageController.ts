@@ -29,18 +29,19 @@ class ImageController {
         }
     }
 
-    // public createTag = async (req: Request, res: Response):Promise<void> => {
-    //     try {
-    //         const tags = req.body.tags
-    //         await imageBusiness.createTag(tags)
 
-    //         res.status(200).send({message: 'Tag successfully created'})
-    //     } catch (error) {
-    //         const {statusCode, message} = error
-    //         console.log(`[controller]: error:`, statusCode, message)
-    //         res.status(statusCode || 400).send({message})
-    //     }
-    // }
+    public getImageById = async (req: Request, res: Response):Promise<any> => {
+        try {
+            const id = req.params.id
+            const token = req.headers.authorization
+            const image = await imageBusiness.getImageById({id, token})
+            res.status(200).send(image)
+        } catch (error) {
+            const {statusCode, message} = error
+            res.status(statusCode || 400).send({message})
+        }
+    }
+
 }
 
 

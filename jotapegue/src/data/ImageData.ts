@@ -86,6 +86,34 @@ class ImageData extends BaseDataBase {
     }
 
 
+    public getImageById = async (id:string):Promise<any> => {
+        try {
+            const queryResult = await this.connection('JPG_IMAGE')
+                .select('*')
+                .where({id})
+            if (!queryResult.length) {throw new CustomError(404, 'Image not found')}
+            return queryResult[0]
+        } catch (error) {
+            const {statusCode, message} = error
+            throw new CustomError(statusCode, message)
+        }
+    }
+
+
+    public getAllImages = async ():Promise<any> => {
+        try {
+            const queryResult = await this.connection('JPG_IMAGE')
+                .select('*')
+            if (!queryResult.length) {throw new CustomError(404, 'No images')}
+            return queryResult
+        } catch (error) {
+            const {statusCode, message} = error
+            console.log(`[imageData]: [getAllImages]: [error]:`, error)
+            throw new CustomError(statusCode, message)
+        }
+    }
+
+
     public getTagByName = async (name:string):Promise<any> => {
         try {
             const tag = await this.connection('JPG_TAG')

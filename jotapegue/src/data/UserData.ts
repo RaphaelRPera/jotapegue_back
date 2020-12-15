@@ -30,7 +30,7 @@ class UserData extends BaseDataBase {
 
             if (!queryResult.length) {throw new CustomError(404, 'User not found')}
             
-            console.log(`[UserData]: [getUserByEmail]: queryResult`, queryResult)
+            // console.log(`[UserData]: [getUserByEmail]: queryResult`, queryResult)
             const {id, name, email, nickname, password} = queryResult[0]
             const userData = {id, name, email, nickname, password}
             return userData

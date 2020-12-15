@@ -62,8 +62,7 @@ class UserBusiness {
             const tokenData = services.getTokenData(token)
             const {id, role} = tokenData
             const user = await userData.getUserById(id)
-            // console.log(`[userBusiness]: [validateUser]: [user]:`, user)
-            if (!user) {throw new CustomError(404, 'User not found')}
+            if (!user) {throw new CustomError(401, 'Unauthorized')}
             return user
         } catch (error) {
             const {statusCode, message} = error
