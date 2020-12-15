@@ -7,9 +7,9 @@ import { UserInputDTO } from '../model/User'
 class UserController {
     public createUser = async (req: Request, res: Response): Promise<void> => {
         try {
-            const {name, email, nickname, password} = req.body
+            const {name, email, nickname, password, role} = req.body
             const input: UserInputDTO = {   
-                name, email, nickname, password
+                name, email, nickname, password, role
             }
 
             const token:string = await userBusiness.createUser(input)

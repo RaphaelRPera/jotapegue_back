@@ -1,12 +1,17 @@
 import { imageData } from "../data/ImageData";
+import { userData } from "../data/UserData";
 import { CustomError } from "../error/CustomError";
 import { services } from "../services/services";
+import { userBusiness } from "./UserBusiness";
 
 
 class ImageBusiness {
-    public createImage = async (image: any):Promise<any> => {
+    public createImage = async (data: any):Promise<any> => {
         try {
-            const {subtitle, author, file, tags, collection} = image
+            const token = data.token
+            const user = await userBusiness.validateUser(token)
+
+            const {subtitle, author, file, tags, collection} = data.body
 
             if (!subtitle) {throw new CustomError(400, 'Subtitle is required')}
             if (!author) {throw new CustomError(400, 'Author is required')}
@@ -23,12 +28,15 @@ class ImageBusiness {
                 return {id, message:'Image successfully created'}
             } else {
                 const id:string = imageBd[0].id
-                return {id, message:'Image already existis'}
+                return {id, message:'Image already exists'}
             }
             
         } catch (error) {
             const {statusCode, message} = error
-            throw new CustomError(statusCode, message)
+            switch (message) {
+                case 'invalid signature': throw new CustomError(401, 'Unauthorized'); break;
+                default: throw new CustomError(statusCode, message); break;
+            }
         }
     }
 

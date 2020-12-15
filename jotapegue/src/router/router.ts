@@ -10,8 +10,7 @@ userRouter.post('/login', userController.login)         //endpoint para login de
 export const imageRouter = express.Router()
 imageRouter.post('/', imageController.createImage)     //endpoint para cadastro de conteúdo
 imageRouter.get('/', )      //endpoint para listar todos os itens
-
-imageRouter.post('/tag', imageController.createTag)   //endpoint para consultar/listar item específico
-
 imageRouter.get('/:id', )   //endpoint para consultar/listar item específico
+// imageRouter.post('/tag', imageController.createTag)   //endpoint para consultar/listar item específico
+
 

@@ -1,10 +1,16 @@
 
+enum UserRole {
+    NORMAL = "NORMAL",
+    ADMIN = "ADMIN"
+}
+
 
 export interface UserInputDTO {
     name: string,
     email: string,
     nickname: string,
     password: string,
+    role: UserRole
 }
 
 export interface UserInput {
@@ -13,6 +19,7 @@ export interface UserInput {
     email: string,
     nickname: string,
     password: string,
+    role: UserRole
 }
 
 

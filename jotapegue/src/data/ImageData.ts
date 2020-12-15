@@ -80,7 +80,8 @@ class ImageData extends BaseDataBase {
                 .where({file})
             return image
         } catch (error) {
-            
+            const {statusCode, message} = error 
+            throw new CustomError(statusCode, message)
         }
     }
 

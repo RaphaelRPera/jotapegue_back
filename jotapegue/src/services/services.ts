@@ -2,20 +2,20 @@ import * as jwt from 'jsonwebtoken'
 import { v4 } from 'uuid'
 import * as bcrypt from 'bcryptjs'
 
+interface AuthenticationData {id:string, role?:string}
+
 class Services {
     generateId = ():string => v4()
 
-    generateToken = (payload:object):string => {      
+    generateToken = (payload:AuthenticationData):string => {      
         return jwt.sign(
             payload,
             process.env.JWT_KEY as string,
-            {
-                expiresIn: process.env.JWT_EXPIRES_IN
-            }
+            {expiresIn: process.env.JWT_EXPIRES_IN}
         )
     }
 
-    getTokenData = (token:string):object => {
+    getTokenData = (token:string):any => {
         const result: any = jwt.verify(
             token,
             process.env.JWT_KEY as string

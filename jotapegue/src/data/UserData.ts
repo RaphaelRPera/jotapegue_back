@@ -5,12 +5,19 @@ import { UserInput } from '../model/User'
 class UserData extends BaseDataBase {
     public createUser = async(user:UserInput):Promise<void> => {
         try {
-            const {id, name, email, nickname, password} = user
+            const {id, name, email, nickname, password, role} = user
             await this.connection('JPG_USER')
-                .insert({ id, name, email, nickname, password })
+                .insert({ id, name, email, nickname, password, role })
         } catch (error) {
-            const {statusCode, message} = error
-            throw new CustomError(statusCode, message)
+            const {statusCode, code, message, sqlMessage} = error
+
+            switch (error.code) {
+                case "ER_DUP_ENTRY":
+                    throw new CustomError(403, 'User already registered'); break;
+                default:
+                    throw new CustomError(statusCode || code, sqlMessage || message); break;
+                    break;
+            }
         }
     }
 
@@ -21,7 +28,7 @@ class UserData extends BaseDataBase {
                 .select('*')
                 .where({email: emailInput})
 
-            // if (!queryResult.length) {throw new CustomError(401, 'Not found')}
+            if (!queryResult.length) {throw new CustomError(404, 'User not found')}
             
             console.log(`[UserData]: [getUserByEmail]: queryResult`, queryResult)
             const {id, name, email, nickname, password} = queryResult[0]
@@ -29,12 +36,7 @@ class UserData extends BaseDataBase {
             return userData
         } catch (error) {
             const {statusCode, message} = error
-            console.log(`[UserData]: [getUserByEmail]: error`, error)
-            switch (message) {
-                case "Cannot destructure property 'id' of 'queryResult[0]' as it is undefined.":
-                    throw new CustomError(statusCode, 'Not Found');
-                    break;
-            
+            switch (message) {           
                 default: throw new CustomError(statusCode, message);
                     break;
             }
@@ -48,9 +50,24 @@ class UserData extends BaseDataBase {
             const queryResult:any = await this.connection('JPG_USER')
                 .select('*')
                 .where({nickname: nickInput})
+            if (!queryResult.length) {throw new CustomError(404, 'User not found')}
             const {id, name, email, nickname, password} = queryResult[0]
             const userData = {id, name, email, nickname, password}
             return userData
+        } catch (error) {
+            const {statusCode, message} = error
+            throw new CustomError(statusCode, message)
+        }
+    }
+
+
+    public getUserById = async (id:string):Promise<any> => {
+        try {
+            const queryResult:any = await this.connection('JPG_USER')
+                .select('*')
+                .where({id})
+            if (!queryResult.length) {throw new CustomError(404, 'User not found')}
+            return queryResult[0]
         } catch (error) {
             const {statusCode, message} = error
             throw new CustomError(statusCode, message)
