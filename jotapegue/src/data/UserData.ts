@@ -23,7 +23,7 @@ class UserData extends BaseDataBase {
 
     public getUserByEmail = async (emailInput: string):Promise<object> => {
         try {
-            console.log(`[UserData]: [getUserByEmail]: emailInput`, emailInput)
+            console.log(`[UserData]: [getUserByEmail]: [emailInput]:`, emailInput)
             const queryResult:any = await this.connection('JPG_USER')
                 .select('*')
                 .where({email: emailInput})
@@ -47,6 +47,7 @@ class UserData extends BaseDataBase {
 
     public getUserByNick = async (nickInput: string):Promise<object> => {
         try {
+            console.log(`[UserData]: [getUserByNick]: [nickInput]:`, nickInput)
             const queryResult:any = await this.connection('JPG_USER')
                 .select('*')
                 .where({nickname: nickInput})

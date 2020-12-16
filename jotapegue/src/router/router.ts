@@ -4,8 +4,9 @@ import { userController } from '../controller/UserController'
 
 
 export const userRouter = express.Router()
-userRouter.post('/signup', userController.createUser)   //endpoint para cadastro de usuário
-userRouter.post('/login', userController.login)         //endpoint para login de usuário
+userRouter.post('/signup', userController.createUser)       //endpoint para cadastro de usuário
+userRouter.post('/login', userController.login)             //endpoint para login de usuário
+userRouter.get('/validate', userController.validateUser)   //endpoint para validar token do usuário
 
 
 export const imageRouter = express.Router()

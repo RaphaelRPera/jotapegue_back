@@ -15,10 +15,8 @@ class ImageData extends BaseDataBase {
 
             switch (error.code) {
                 case "ER_DUP_ENTRY":
-                    // console.log(`[data]: [createTag]: error`, error.code); break;
                     throw new CustomError(403, 'Image already on the system'); break;
                 default:
-                    // console.log(`[data]: [createTag]: error`, error.code);
                     throw new CustomError(statusCode || code, sqlMessage || message); break;
                     break;
             }
@@ -39,10 +37,7 @@ class ImageData extends BaseDataBase {
             switch (error.code) {
                 case "ER_DUP_ENTRY":
                     return
-                    console.log(`[data]: [createTag]: error`, error.code);
-                    // throw new CustomError(403, 'Tag already exists'); break;
                 default:
-                    // console.log(`[data]: [createTag]: error`, error.code);
                     throw new CustomError(statusCode || code, sqlMessage || message); break;
                     break;
             }

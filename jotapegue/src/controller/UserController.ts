@@ -1,5 +1,6 @@
 import { Response, Request } from 'express'
 import { userBusiness } from '../business/UserBusiness'
+import { CustomError } from '../error/CustomError'
 import { UserInputDTO } from '../model/User'
 
 
@@ -33,6 +34,20 @@ class UserController {
             res.status(statusCode || 400).send({message})
         }
     }
+
+
+    public validateUser = async (req:Request, res:Response):Promise<void> => {
+        try {
+            const token = req.headers.authorization
+            if (!token) {throw new CustomError(401, 'Unauthorized')}
+            await userBusiness.validateUser(token)
+            res.status(200).send({message: 'Authorized'})
+        } catch (error) {
+            const {statusCode, message} = error
+            res.status(statusCode || 400).send({message})
+        }
+    }
+
 }
 
 

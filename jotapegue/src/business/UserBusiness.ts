@@ -66,9 +66,10 @@ class UserBusiness {
             return user
         } catch (error) {
             let {statusCode, message} = error
-            if (message === 'jwt expired') {
-                statusCode = 401
-                message = `Unauthorized. New login required`
+            switch (message) {
+                case 'jwt expired': statusCode = 401; message = `Unauthorized. New login required`; break;
+                case 'jwt malformed': statusCode = 401; message = `Unauthorized`; break;
+                default: statusCode = 401; message = `Unauthorized`; break;
             }
             throw new CustomError(statusCode, message)
         }
