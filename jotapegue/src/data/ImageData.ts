@@ -5,10 +5,10 @@ import { BaseDataBase } from './BaseDataBase'
 class ImageData extends BaseDataBase {
     public createImage = async (image: any):Promise<void> => {
         try {
-            const {id, subtitle, author, date, file, collection} = image
+            const {id, subtitle, user_id, date, file, collection} = image
             await this.connection('JPG_IMAGE')
                 .insert({
-                    id, subtitle, author, date, file, collection
+                    id, subtitle, user_id, date, file, collection
                 })
         } catch (error) {
             const {statusCode, code, message, sqlMessage} = error
@@ -95,7 +95,7 @@ class ImageData extends BaseDataBase {
     }
 
 
-    public getAllImages = async ():Promise<any> => {
+    public getImageAll = async (userId:string):Promise<any> => {
         try {
             const queryResult = await this.connection('JPG_IMAGE')
                 .select('*')

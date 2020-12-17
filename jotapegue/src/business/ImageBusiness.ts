@@ -14,10 +14,9 @@ class ImageBusiness {
             const token = data.token
             const user = await userBusiness.validateUser(token)
 
-            const {subtitle, author, file, tags, collection} = data.body
+            const {subtitle, file, tags, collection} = data.body
 
             if (!subtitle) {throw new CustomError(400, 'Subtitle is required')}
-            if (!author) {throw new CustomError(400, 'Author is required')}
             if (!file) {throw new CustomError(400, 'File is required')}
             if (!collection) {throw new CustomError(400, 'Collection is required')}
 
@@ -25,8 +24,9 @@ class ImageBusiness {
             if (!imageBd.length) {
                 const id:string = services.generateId()
                 const date:Date = new Date()
-    
-                const newImage = {id, subtitle, author, date, file, collection}
+                const user_id = user && user.id
+
+                const newImage = {id, subtitle, user_id, date, file, collection}
                 await imageData.createImage(newImage)
                 return {id, message:'Image successfully created'}
             } else {
@@ -99,7 +99,7 @@ class ImageBusiness {
             let image: any
             if (id === 'all') {
                 if (user && user.role === UserRole.ADMIN) {
-                    image = await imageData.getAllImages()
+                    image = await imageData.getImageAll(user.id)
                 } else {
                     throw new CustomError(401, 'Unauthorized')
                 }

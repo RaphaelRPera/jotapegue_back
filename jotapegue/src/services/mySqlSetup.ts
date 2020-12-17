@@ -27,10 +27,11 @@ class CreateTables extends BaseDataBase {
                     CREATE TABLE ${jpgImage}(
                         id VARCHAR(255) NOT NULL PRIMARY KEY,
                         subtitle VARCHAR(255) NOT NULL,
-                        author VARCHAR(255) NOT NULL,
+                        user_id VARCHAR(255) NOT NULL,
                         date DATE NOT NULL,
                         file MEDIUMTEXT NOT NULL,
-                        collection VARCHAR(255) NOT NULL
+                        collection VARCHAR(255) NOT NULL,
+                        FOREIGN KEY (user_id) REFERENCES JPG_USER(id)
                     );
                 `)
                 createdMsg += `${jpgImage}, `
