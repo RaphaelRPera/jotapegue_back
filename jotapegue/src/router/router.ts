@@ -12,6 +12,7 @@ userRouter.get('/validate', userController.validateUser)   //endpoint para valid
 export const imageRouter = express.Router()
 imageRouter.post('/', imageController.createImage)          //endpoint para cadastro de conteúdo
 // imageRouter.get('/', )      //endpoint para listar todos os itens
+imageRouter.get('/all', imageController.getImageAll)       //endpoint para retornar todos os itens do usuário
 imageRouter.get('/:id', imageController.getImageById)       //endpoint para consultar/listar item específico
 imageRouter.delete('/:id', imageController.deleteImage)     //endpoint para deletar item específico
 

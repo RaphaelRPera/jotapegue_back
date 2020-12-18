@@ -104,13 +104,46 @@ class ImageBusiness {
                     throw new CustomError(401, 'Unauthorized')
                 }
             } else {
-                image =  await imageData.getImageById(id)
+                image = user && await imageData.getImageById(id, user.id)
             }
 
             return image
         } catch (error) {
             const {statusCode, message} = error
             throw new CustomError(statusCode, message)
+        }
+    }
+
+    public getImageAll = async (data:any):Promise<any> => {
+        try {
+            const {token} = data
+            if (!token) {throw new CustomError(401, 'Unauthorized')}
+
+            // const user = await userBusiness.validateUser(token)
+            const user = services.getTokenData(token)
+            const image = await imageData.getImageAll(user.id)
+
+            // let image: any
+            // if (id === 'all') {
+            //     if (user && user.role === UserRole.ADMIN) {
+            //         image = await imageData.getImageAll(user.id)
+            //     } else {
+            //         throw new CustomError(401, 'Unauthorized')
+            //     }
+            // } else {
+            //     image = user && await imageData.getImageById(id, user.id)
+            // }
+
+            return image
+        } catch (error) {
+            const {statusCode, message} = error
+            let errorMessage = message
+            let errorCode = statusCode
+            switch (message) {
+                case 'jwt malformed': errorCode = 401; errorMessage = 'Unauthorized'; break;
+                default: break;
+            }
+            throw new CustomError(errorCode, errorMessage)
         }
     }
 

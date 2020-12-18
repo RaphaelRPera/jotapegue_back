@@ -81,11 +81,12 @@ class ImageData extends BaseDataBase {
     }
 
 
-    public getImageById = async (id:string):Promise<any> => {
+    public getImageById = async (id:string, user_id:string):Promise<any> => {
         try {
             const queryResult = await this.connection('JPG_IMAGE')
                 .select('*')
                 .where({id})
+                .andWhere({user_id})
             if (!queryResult.length) {throw new CustomError(404, 'Image not found')}
             return queryResult[0]
         } catch (error) {
@@ -95,15 +96,16 @@ class ImageData extends BaseDataBase {
     }
 
 
-    public getImageAll = async (userId:string):Promise<any> => {
+    public getImageAll = async (user_id:string):Promise<any> => {
         try {
             const queryResult = await this.connection('JPG_IMAGE')
                 .select('*')
+                .where({user_id})
             if (!queryResult.length) {throw new CustomError(404, 'No images')}
             return queryResult
         } catch (error) {
             const {code, statusCode, message} = error
-            console.log(`[imageData]: [getAllImages]: [error]:`, error)
+            console.log(`[imageData]: [getImageAll]: [error]:`, error.code, error)
             throw new CustomError(statusCode, message)
         }
     }

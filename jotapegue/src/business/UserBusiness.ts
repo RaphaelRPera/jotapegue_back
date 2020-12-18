@@ -33,7 +33,7 @@ class UserBusiness {
     }
 
 
-    public login = async (loginData: any):Promise<string> => {
+    public login = async (loginData: any):Promise<any> => {
         try {
             const loginEmail:string = loginData.email
             const loginPassword:string = loginData.password
@@ -49,7 +49,9 @@ class UserBusiness {
             if (!passwordIsCorrect) {throw new CustomError(400, 'Invalid email or password')}
 
             const token:string = services.generateToken({id: user.id, role: user.role})
-            return token
+            console.log(`[userBusiness]: [login]: [user]:`, user)
+            // return token
+            return {nickname: user.nickname, token}
         } catch (error) {
             const {statusCode, message} = error
             throw new CustomError(statusCode, message)

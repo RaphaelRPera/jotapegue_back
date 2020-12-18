@@ -27,8 +27,9 @@ class UserController {
         try {
             const {email, password} = req.body
             const loginData = {email, password}
-            const token = await userBusiness.login(loginData)
-            res.status(200).send({token})
+            const userData = await userBusiness.login(loginData)
+            // res.status(200).send({token})
+            res.status(200).send(userData)
         } catch (error) {
             const {statusCode, message} = error
             res.status(statusCode || 400).send({message})

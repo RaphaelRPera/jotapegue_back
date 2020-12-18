@@ -43,6 +43,19 @@ class ImageController {
     }
 
 
+    public getImageAll = async (req: Request, res: Response):Promise<any> => {
+        try {
+            const token = req.headers.authorization
+            const image = await imageBusiness.getImageAll({token})
+            res.status(200).send(image)
+        } catch (error) {
+            const {statusCode, message} = error
+            // console.log(`[imageController]: [getImageAll]: [error]:`, statusCode, message)
+            res.status(statusCode || 400).send({message})
+        }
+    }
+
+
     public deleteImage = async (req:Request, res: Response):Promise<void> => {
         try {
             const id = req.params.id
